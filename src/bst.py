@@ -1,150 +1,229 @@
-"""BST data structure."""
-import timeit
+"""Binary Search Tree."""
 
 
 class Node(object):
-    """Node class used for the bst."""
+    """A single node."""
 
-    def __init__(self, data=None):
-        """Init node."""
+    def __init__(self, data, left=None, right=None, parent=None, depth=1):
+        """Construct a new Node."""
         self.data = data
-        self.left = None
-        self.right = None
+        self.left = left
+        self.right = right
 
 
-class BinarySearchTree(object):
-    """Binary search tree class."""
+class BST(object):
+    """Binary Search Tree object."""
 
-    def __init__(self, root=None):
-        """Init the bst class."""
-        self.count = 0
-        if root is None:
-            self.root = root
-        elif isinstance(root, int) or isinstance(root, float):
-            self.root = Node(root)
-            self.count += 1
-        else:
-            raise ValueError('root value must be a number!')
+    def __init__(self, iterable=None):
+        """Create an instance."""
+        self.root = None
+        self._count = 0
+        if isinstance(iterable, (list, tuple)):
+            for item in iterable:
+                self.insert(item)
 
-    def insert(self, item):
-        """Insert a value/node into the tree."""
+        self.depths_list = []
+        self.left_depths_list = []
+        self.right_depths_list = []
+
+    def insert(self, val):
+        """Create a insert method."""
+        if not isinstance(val, (int, float)):
+            raise ValueError('Please enter a number')
         if self.root is None:
-            self.root = Node(item)
-            self.count += 1
-        elif self.search(item):
+            self.root = Node(val)
+            self._count += 1
             return
-        elif isinstance(item, int) or isinstance(item, float):
-            curr_data = self.root
-            while curr_data is not None:
-                if item < curr_data.data:
-                    if curr_data.left is None:
-                        curr_data.left = Node(item)
-                        self.count += 1
-                        return
-                    else:
-                        curr_data = curr_data.left
-                else:  # greater than current node
-                    if curr_data.right is None:
-                        curr_data.right = Node(item)
-                        self.count += 1
-                        return
-                    else:
-                        curr_data = curr_data.right
-        else:
-            raise ValueError('can only insert number')
 
-    def search(self, item):
-        """Search a value in the tree."""
-        node = self.root
-        while node is not None:
-            if node.data == int(item):  # in py2.6 item is str & node.data is int
-                return node
-            elif node.data < int(item):
-                node = node.right
-                continue
-            else:
-                node = node.left
-                continue
-        return
+        curr = self.root
+        while curr:
+            if val == curr.data:
+                raise ValueError('Node already exists')
+            elif val < curr.data:
+                if curr.left:
+                    curr = curr.left
+                else:
+                    curr.left = Node(val, None, None, curr)
+                    self._count += 1
+                    break
+            elif val > curr.data:
+                if curr.right:
+                    curr = curr.right
+                else:
+                    curr.right = Node(val, None, None, curr)
+                    self._count += 1
+                    break
+
+    def search(self, val):
+        """Create search method to find value in BST."""
+        if self.root is None or not isinstance(val, (int, float)):
+            raise ValueError('Node does not exist')
+        curr = self.root
+        while curr:
+            if val == curr.data:
+                return curr.data
+            elif val < curr.data:
+                curr = curr.left
+            elif val > curr.data:
+                curr = curr.right
 
     def size(self):
-        """Return the size of the current tree."""
-        return self.count
+        """Create size method to return size of bst."""
+        return self._count
 
-    def contains(self, item):
-        """Return a boolean value if a node is in the tree."""
-        return isinstance(self.search(item), Node)
+    def depth(self):
+        """Return depth."""
+        self.depths_list = []
+        depth = 0
+        if self.root:
+            self._depth_func(self.root, depth)
+            return max(self.depths_list)
+        return depth
 
-    def depth(self, root):
-        """Return the depth of the current tree (o for root only tree)."""
-        return max(0, self._depth(root) - 1)
+    def _depth_func(self, current, depth):
+        if current.right is None and current.left is None:
+            self.depths_list.append(depth)
+            return
+        if current.right:
+            return self._depth_func(current.right, depth + 1)
+        if current.left:
+            return self._depth_func(current.left, depth + 1)
 
-    def _depth(self, root):
-        """Return the depth of the current tree internal use only."""
-        if root is None:
-            return 0
+    def contains(self, val):
+        """Create method to find if an individual node exists."""
+        if self.search(val) is not None:
+            return True
         else:
-            return max(self._depth(root.left), self._depth(root.right)) + 1
+            return False
 
     def balance(self):
-        """Return the current balance of the tree."""
+        """Return tree balance."""
+        self.depths_list = []
+        left_depth = 0
+        if self.root.left:
+            self._depth_func(self.root.left, left_depth + 1)
+            left_depth = max(self.depths_list)
+
+        self.depths_list = []
+        right_depth = 0
+        if self.root.right:
+            self._depth_func(self.root.right, right_depth + 1)
+            right_depth = max(self.depths_list)
+
+        return right_depth - left_depth
+
+    def bft(self):
+        """Use a generator with breadth first traversal."""
         if self.root is None:
-            return 0
-        else:
-            left_depth = self._depth(self.root.left)
-            right_depth = self._depth(self.root.right)
-            return left_depth - right_depth
+            raise ValueError('The tree is empty')
+        breadth = [self.root]
+        while breadth:
+            curr = breadth.pop(0)
+            if curr.left:
+                breadth.append(curr.left)
+            if curr.right:
+                breadth.append(curr.right)
+            yield curr.data
 
-    def in_order(self, root):
-        """Return val of tree in-order traversal one at a time."""
-        if root is not None:
-            for val in self.in_order(root.left):
-                yield val
-            yield root.data
-            for val in self.in_order(root.right):
-                yield val
+    def ordered(self):
+        """Use generator for an ordered search."""
+        curr = self.root
+        searched = []
+        if self.root is None:
+            raise ValueError('The tree is empty')
+        while curr or searched:
+            if curr:
+                searched.append(curr)
+                curr = curr.left
+            else:
+                curr = searched.pop()
+                yield curr.data
+                curr = curr.right
 
-    def post_order(self, root):
-        """Return val of tree post-order traversal one at a time."""
-        if root is not None:
-            for val in self.post_order(root.left):
-                yield val
-            for val in self.post_order(root.right):
-                yield val
-            yield root.data
+    def pre_ordered(self):
+        """."""
+        curr = self.root
+        searched = []
+        if self.root is None:
+            raise ValueError('The tree is empty')
+        while curr or searched:
+            if curr:
+                yield curr.data
+                if curr.right:
+                    searched.append(curr.right)
+                curr = curr.left
+            else:
+                curr = searched.pop()
 
-    def pre_order(self, root):
-        """Return val of tree pre-order traversal one at a time."""
-        if root is not None:
-            yield root.data
-            for val in self.pre_order(root.left):
-                yield val
-            for val in self.pre_order(root.right):
-                yield val
+    def post_order(self):
+        """."""
+        curr = self.root
+        searched = []
+        child = None
+        if self.root is None:
+            raise ValueError('The tree is empty')
+        while curr or searched:
+            if curr:
+                searched.append(curr)
+                curr = curr.left
+            else:
+                if searched[-1].right and searched[-1].right is not child:
+                    curr = searched[-1].right
+                else:
+                    child = searched.pop()
+                    yield child.data
+
 
 if __name__ == '__main__':  # pragma: no cover
-    b = BinarySearchTree(20)  # balanced tree depth 3
-    b.insert(10)
-    b.insert(5)
-    b.insert(15)
-    b.insert(3)
-    b.insert(7)
-    b.insert(13)
-    b.insert(17)
-    b.insert(30)
-    b.insert(25)
-    b.insert(23)
-    b.insert(27)
-    b.insert(35)
-    b.insert(37)
-    b.insert(33)
+    import timeit
 
-    a = BinarySearchTree(0)  # all right node tree
-    for num in range(1, 15):
-        a.insert(num)
+    insert_time_ub = BST()
+    num = (x for x in range(1000))
+    a = timeit.timeit('insert_time_ub.insert(next(num))',
+                      setup='from __main__ import insert_time_ub, num',
+                      number=1000)
+    search_time_ub = BST()
+    for i in range(100):
+        search_time_ub.insert(i)
+    b = timeit.timeit('search_time_ub.search(99)',
+                      setup='from __main__ import search_time_ub',
+                      number=1000)
+    c = timeit.timeit('search_time_ub.search(0)',
+                      setup='from __main__ import search_time_ub',
+                      number=1000)
+    insert_time_b = BST()
 
-    t_s = timeit.timeit('b.search(30) ', setup='from __main__ import b')
-    print('shortest search time for my unbalanced tree of size 15 is ' + str(t_s) + ' seconds')
-    t_l = timeit.timeit('a.search(14)', setup='from __main__ import a')
-    print('longest search time for my unbalanced tree of size 15 is ' + str(t_l) + ' seconds')
+    def insert_time(val):
+        """."""
+        if (500 + val) % 2 == 0:
+            insert_time_b.insert(500 + val)
+        else:
+            insert_time_b.insert(500 - val)
 
+    num_b = (x for x in range(1000))
+    d = timeit.timeit('insert_time(next(num_b))',
+                      setup='from __main__ import insert_time, num_b',
+                      number=1000)
+
+    search_time_b = BST()
+    for i in range(1000):
+        if (500 + i) % 2 == 0:
+            search_time_b.insert(500 + i)
+        else:
+            search_time_b.insert(500 - i)
+    e = timeit.timeit('search_time_b.search(999)',
+                      setup='from __main__ import search_time_b',
+                      number=1000)
+    f = timeit.timeit('search_time_b.search(500)',
+                      setup='from __main__ import search_time_b',
+                      number=1000)
+
+    print('The following time relates to worst case insert.')
+    print('Insert unbalanced: {}'.format(a))
+    print('Insert balanced: {}'.format(d))
+    print('\nThe following time relates to worst case search.')
+    print('Search unbalanced leaf: {}'.format(b))
+    print('Search balanced leaf: {}'.format(e))
+    print('\nThe following time relates to best base search.')
+    print('Search unbalanced head: {}'.format(c))
+    print('Search balanced head: {}'.format(f))

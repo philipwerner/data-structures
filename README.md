@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/han8909227/data-structures.svg?branch=master)](https://travis-ci.org/han8909227/data-structures)
 # Data Structure
-Various data structure written in python by Han Bao and Phillip Werner
+Various data structure written in python by Han Bao and Phil Werner and then just by Phil Werner
 
 
 # Linked-Lists
