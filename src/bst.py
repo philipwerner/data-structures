@@ -9,6 +9,7 @@ class Node(object):
         self.data = data
         self.left = left
         self.right = right
+        self.parent = parent
 
 
 class BST(object):
@@ -44,6 +45,7 @@ class BST(object):
                     curr = curr.left
                 else:
                     curr.left = Node(val, None, None, curr)
+                    curr.left.parent = curr
                     self._count += 1
                     break
             elif val > curr.data:
@@ -51,6 +53,7 @@ class BST(object):
                     curr = curr.right
                 else:
                     curr.right = Node(val, None, None, curr)
+                    curr.right.parent = curr
                     self._count += 1
                     break
 
@@ -172,6 +175,55 @@ class BST(object):
                 else:
                     child = searched.pop()
                     yield child.data
+
+    def delete(self, val):
+        """Delete a node from the tree."""
+        to_delete = self.search(val)
+        if to_delete is None:
+            raise ValueError('Value does not exist in the tree.')
+        elif to_delete.left is None and to_delete.right is None:
+            if to_delete is self.root:
+                self.root = None
+                self.count = 0
+                return
+            elif val > to_delete.parent.data:
+                to_delete.parent.right = None
+            else:
+                to_delete.parent.left = None
+            self.count -= 1
+            return
+        elif to_delete.left is None or to_delete.right is None:
+            if to_delete.left:
+                new_node = to_delete.left
+            else:
+                new_node = to_delete.right
+            if to_delete.parent:
+                if to_delete.parent.left is to_delete:
+                    to_delete.parent.left = new_node
+                else:
+                    to_delete.parent.right = new_node
+                new_node.parent = to_delete.parent
+            else:
+                self.root = new_node
+                self.root.parent = None
+            self.count -= 1
+            return
+        else:
+            new_node = self._help_delete(to_delete.right)
+            to_delete = new_node.data
+            if new_node is to_delete.right:
+                new_node.parent.right = None
+            else:
+                new_node.parent.left = None
+            self.count -= 1
+            return
+
+    def _help_delete(self, node):
+        """Return the left most node on the right side of tree."""
+        if node.left is None:
+            return node
+        return self._help_delete(node.left)
+
 
 
 if __name__ == '__main__':  # pragma: no cover
