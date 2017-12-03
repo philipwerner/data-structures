@@ -222,7 +222,7 @@ class BST(object):
         """Return the left most node on the right side of tree."""
         if node.left is None:
             return node
-        return self._help_delete(node.left)
+        return self._help_delete(node)
 
 
 

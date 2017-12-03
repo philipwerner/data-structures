@@ -231,3 +231,25 @@ def test_post_order_stop_iteration():
         next(b)
         next(b)
         next(b)
+
+
+def test_delete_only_node_in_bst():
+    """Test deleting the only node in a tree."""
+    a = BST([9])
+    assert a.size() == 1
+    a.delete(9)
+    assert a.size() == 0
+
+
+def test_delete_non_existent_node():
+    """Test for value error when trying to delete nonexist node."""
+    a = BST([9, 8, 5])
+    with pytest.raises(ValueError):
+        a.delete(99)
+
+
+def test_delete_node_with_child():
+    """Test that nodes are rearranged after delete."""
+    a = BST([5, 4, 6, 3, 4.5, 4.6, 7, 5.5])
+    a.delete(4.5)
+    assert a.bft() == [5, 4, 6, 3, 4.6, 5.5, 7]
