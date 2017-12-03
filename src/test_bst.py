@@ -256,3 +256,8 @@ def test_delete_node_with_child():
     for i in range(7):
         result.append(next(b))
     assert result == [5, 4, 6, 3, 4.6, 5.5, 7]
+
+def test_self_balance_after_insert():
+    """Test balancing after inserting a new node."""
+    a = BST([5, 4])
+    

@@ -47,6 +47,7 @@ class BST(object):
                     curr.left = Node(val, None, None, curr)
                     curr.left.parent = curr
                     self._count += 1
+                    self._balance_check(curr.left)
                     break
             elif val > curr.data:
                 if curr.right:
@@ -55,6 +56,7 @@ class BST(object):
                     curr.right = Node(val, None, None, curr)
                     curr.right.parent = curr
                     self._count += 1
+                    self._balance_check(curr.right)
                     break
 
     def search(self, val):
@@ -99,7 +101,7 @@ class BST(object):
         else:
             return False
 
-    def balance(self):
+    def balance(self, node):
         """Return tree balance."""
         self.depths_list = []
         left_depth = 0
@@ -188,9 +190,12 @@ class BST(object):
                 return
             elif val > to_delete.parent.data:
                 to_delete.parent.right = None
+                self._balance_check(to_delete.parent)
             else:
                 to_delete.parent.left = None
+                self._balance_check(to_delete.parent)
             self._count -= 1
+
             return
         elif to_delete.left is None or to_delete.right is None:
             if to_delete.left:
@@ -200,12 +205,15 @@ class BST(object):
             if to_delete.parent:
                 if to_delete.parent.left is to_delete:
                     to_delete.parent.left = new_node
+                    self._balance_check(to_delete.parent)
                 else:
                     to_delete.parent.right = new_node
+                    self._balance_check(to_delete.parent)
                 new_node.parent = to_delete.parent
             else:
                 self.root = new_node
                 self.root.parent = None
+                self._balance_check(self.root)
             self._count -= 1
             return
         else:
@@ -216,6 +224,7 @@ class BST(object):
             else:
                 new_node.parent.left = None
             self._count -= 1
+            self._balance_check(new_node)
             return
 
     def _help_delete(self, node):
@@ -223,6 +232,60 @@ class BST(object):
         if node.left is None:
             return node
         return self._help_delete(node)
+
+    def _rotate_right(self, node):
+        """Rotate node to the right, with knees in tight."""
+        swing = node.left
+        swing.parent = node.parent
+        node.left = swing.right
+        if swing.right:
+            swing.right.parent = node
+        if node.parent:
+            if node.parent.data > swing.data:
+                node.parent.left = swing
+            else:
+                node.parent.right = swing
+        node.parent = swing
+        if swing.parent is None:
+            self.root = swing
+
+    def _rotate_left(self, node):
+        """It is jsut a rotate to the left."""
+        swing = node.right
+        swing.parent = node.parent
+        node.right = swing.left
+        if swing.left:
+            swing.left.parent = node
+        swing.left = node
+        if node.right:
+            node.right.parent = node
+        if node.parent:
+            if node.parent.data > swing.data:
+                node.parent.left = swing
+            else:
+                node.parent.right = swing
+        node.parent = swing
+        if swing.parent is None:
+            self.root = swing
+
+    def _balance_check(self, node):
+        """Check parents for balance after insert or delete."""
+        bal_check = node
+        while bal_check is not None:
+            if self.balance(bal_check) > 1:
+                if self.balance(bal_check.left) >= 0:
+                    self._rotate_right(bal_check)
+                else:
+                    self._rotate_left(bal_check.left)
+                    self._rotate_right(bal_check)
+            elif self.balance(bal_check) < -1:
+                if self.balance(bal_check.right) <= 0:
+                    self._rotate_left(bal_check)
+                else:
+                    self._rotate_right(bal_check.right)
+                    self._rotate_left(bal_check)
+            else:
+                bal_check = bal_check.parent
 
 
 
