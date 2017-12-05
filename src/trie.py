@@ -27,6 +27,7 @@ class Trie:
 
     def __init__(self):
         """Attr upon initialization."""
+        self.root = Node('*')
         self.head = Node()
         self._size = 0
 
@@ -53,6 +54,7 @@ class Trie:
                     curr_node = curr_node.children[string[i]]
                     i += 1
             curr_node.data = string
+            curr_node._add_child('$')
             self._size += 1
 
     def contains(self, string):
@@ -79,11 +81,20 @@ class Trie:
         """Return the total number of words in the Trie."""
         return self._size
 
-    # def remove(self, string):
-    #     """Remove a word from the Trie."""
-    #     if string is None or string == '':
-    #         return ValueError('Please enter a string')
-    #     if self.contains(string) is False:
-    #         return ValueError('The word is not in the Trie')
-    #     if self.contains(string) is True:
-    #         for i in string:
+    def remove(self, string):
+        """Remove a word from the Trie."""
+        if not isinstance(string, str):
+            raise TypeError("word must be a string")
+        string += '$'
+        letter = []
+        curr_node = self.root
+        for i in string:
+            if i in curr_node.children:
+                curr_node = curr_node.children[i]
+                letter.append(curr_node)
+            else:
+                raise ValueError('Word is not in trie')
+        letter.reverse()
+        for i in letter:
+            if len(i.children) == 0:
+                
