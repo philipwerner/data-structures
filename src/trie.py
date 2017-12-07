@@ -81,20 +81,19 @@ class Trie:
         """Return the total number of words in the Trie."""
         return self._size
 
-    def remove(self, string):
-        """Remove a word from the Trie."""
-        if not isinstance(string, str):
-            raise TypeError("word must be a string")
-        string += '$'
-        letter = []
-        curr_node = self.root
-        for i in string:
-            if i in curr_node.children:
-                curr_node = curr_node.children[i]
-                letter.append(curr_node)
-            else:
-                raise ValueError('Word is not in trie')
-        letter.reverse()
-        for i in letter:
-            if len(i.children) == 0:
-                
+    # def remove(self, string):
+    #     """Remove a word from the Trie."""
+    #     if not isinstance(string, str):
+    #         raise TypeError("word must be a string")
+    #     string += '$'
+    #     letter = []
+    #     curr_node = self.root
+    #     for i in string:
+    #         if i in curr_node.children:
+    #             curr_node = curr_node.children[i]
+    #             letter.append(curr_node)
+    #         else:
+    #             raise ValueError('Word is not in trie')
+    #     letter.reverse()
+    #     for i in letter:
+    #         if len(i.children) == 0:
