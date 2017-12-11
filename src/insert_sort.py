@@ -17,15 +17,15 @@ def insert_sort(ilist):
 
 if __name__ == '__main__':  # pragma no cover
     import timeit as ti
-    sort_1 = [1, 2, 4, 9, 10, 11]
-    sort_2 = [17, 9, 7, 4, 1, 0]
+    sort_1 = [1, 2, 7, 8, 9, 10]
+    sort_2 = [15, 10, 6, 2, 3, 0]
 
     time_1 = ti.timeit("insert_sort(sort_1[:])",
                        setup="from __main__ import sort_1, insert_sort")
     time_2 = ti.timeit("insert_sort(sort_2[:])",
                        setup="from __main__ import sort_2, insert_sort")
     print("""
-        Input: [1, 2, 4, 9, 10, 11]
+        Input: [1, 2, 7, 8, 9, 10]
         Good case: {}
-        Input: [17, 9, 7, 4, 1, 0]
+        Input: [15, 10, 6, 2, 3, 0]
         Bad case: {}""".format(time_1, time_2))
