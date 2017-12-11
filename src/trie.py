@@ -27,7 +27,7 @@ class Trie:
 
     def __init__(self):
         """Attr upon initialization."""
-        self.root = Node('*')
+        self.root = {}
         self.head = Node()
         self._size = 0
 
@@ -81,19 +81,20 @@ class Trie:
         """Return the total number of words in the Trie."""
         return self._size
 
-    # def remove(self, string):
-    #     """Remove a word from the Trie."""
-    #     if not isinstance(string, str):
-    #         raise TypeError("word must be a string")
-    #     string += '$'
-    #     letter = []
-    #     curr_node = self.root
-    #     for i in string:
-    #         if i in curr_node.children:
-    #             curr_node = curr_node.children[i]
-    #             letter.append(curr_node)
-    #         else:
-    #             raise ValueError('Word is not in trie')
-    #     letter.reverse()
-    #     for i in letter:
-    #         if len(i.children) == 0:
+      
+    def remove(self, string):
+        """Remove string from Trie tree."""
+        if self.contains(string):
+            self._size -= 1
+            temp = self.root
+            temp_str = list(string)
+            for i in range(len(string)):
+                for letter in temp_str:
+                    if temp[letter] in ({'$': '$'}, {}):
+                        del temp[letter]
+                        temp_str.pop()
+                    else:
+                        temp = temp[letter]
+                temp = self.root
+        else:
+            raise ValueError('String not in tree.')

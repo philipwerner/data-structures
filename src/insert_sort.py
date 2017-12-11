@@ -19,6 +19,7 @@ if __name__ == '__main__':  # pragma no cover
     import timeit as ti
     sort_1 = [1, 2, 7, 8, 9, 10]
     sort_2 = [15, 10, 6, 2, 3, 0]
+    
 
     time_1 = ti.timeit("insert_sort(sort_1[:])",
                        setup="from __main__ import sort_1, insert_sort")
