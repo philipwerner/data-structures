@@ -81,6 +81,7 @@ class Trie:
         """Return the total number of words in the Trie."""
         return self._size
 
+      
     def remove(self, string):
         """Remove string from Trie tree."""
         if self.contains(string):
