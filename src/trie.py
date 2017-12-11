@@ -81,7 +81,6 @@ class Trie:
         """Return the total number of words in the Trie."""
         return self._size
 
-      
     def remove(self, string):
         """Remove string from Trie tree."""
         if self.contains(string):
@@ -98,3 +97,20 @@ class Trie:
                 temp = self.root
         else:
             raise ValueError('String not in tree.')
+
+    def bft(self, start):
+        """Return all value from the start using breadth first traversal."""
+        result = []
+        que = [start]
+        repeat = set()
+        if not self.has_node(start):
+            raise ValueError('no such node in the graph')
+        while que:
+            pop = que.pop(0)
+            children = self.children(pop)
+            result.append(pop)
+            repeat.add(pop)
+            for child in children:
+                if child not in repeat:
+                    que.append(child)
+        return result
