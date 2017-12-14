@@ -6,6 +6,11 @@ def merge_sort(ilist):
     if isinstance(ilist, list):
         if len(ilist) <= 1:
             return ilist
+        elif len(ilist) == 2:
+            if ilist[0] > ilist[1]:
+                ilist[0], ilist[1] = ilist[1], ilist[0]
+            else:
+                return ilist
         split_list = len(ilist) // 2
         left_list = merge_sort(ilist[:split_list])
         right_list = merge_sort(ilist[split_list:])
