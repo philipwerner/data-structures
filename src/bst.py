@@ -225,7 +225,6 @@ class BST(object):
         return self._help_delete(node)
 
 
-
 if __name__ == '__main__':  # pragma: no cover
     import timeit
 
