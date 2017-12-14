@@ -4,6 +4,14 @@
 def radix_sort(ilist):
     """Radix sorting method."""
     if isinstance(ilist, list):
+        if len(ilist) == 1:
+            return ilist
+        elif len(ilist) == 2:
+            if ilist[0] > ilist[1]:
+                ilist[0], ilist[1] = ilist[1], ilist[0]
+                return ilist
+            else:
+                return ilist
         x = 10
         temp = -1
         place = 1

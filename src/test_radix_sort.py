@@ -6,6 +6,24 @@ bs_list = [9, 8, 7, 6, 5, 4, 3, 2, 1]
 uo_list = [56, 3, 78, 79, 34, 22, 87, 1, 23]
 big_list = [945, 1023, 43, 198, 2, 743, 3219, 219, 574, 206, 919, 342]
 dupe_list = [76, 44, 923, 123, 44, 56, 923, 76, 3, 2]
+three = [78, 34, 57]
+two = [99, 1]
+one = [999]
+
+
+def test_radix_on_list_of_3():
+    """Test that radix sort works on list of 3."""
+    assert rs(three) == [34, 57, 78]
+
+
+def test_radix_on_list_of_2():
+    """Test that radix sort works on list of 2."""
+    assert rs(two) == [1, 99]
+
+
+def test_radix_on_list_of_1():
+    """Test that radix sort works on list of 1."""
+    assert rs(one) == [999]
 
 
 def test_radix_on_sorted_list():
