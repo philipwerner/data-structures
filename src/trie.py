@@ -1,100 +1,121 @@
 """Trie module for trie tree."""
 
 
-class Node:
+class Node(object):
     """Node for trie tree."""
 
-    def __init__(self, label=None, data=None):
-        """Attr upon initialization."""
-        self.label = label
-        self.data = data
-        self.children = dict()
+    def __init__(self, end_node=False):
+        """Create instance of the node."""
+        self.end = end_node
+        self.prefix = 0
+        self.children = {}
 
-    def _add_child(self, key, data=None):
-        """."""
-        if not isinstance(key, Node):
-            self.children[key] = Node(key, data)
+
+class Trie(object):
+    """Trie (prefix tree) in python."""
+
+    def __init__(self, iterable=()):
+        """Create a trie instance."""
+        self.root = Node()
+        self.size = 0
+        if isinstance(iterable, (list, tuple)):
+            for word in iterable:
+                self.insert(word)
         else:
-            self.children[key.label] = key
-
-    def __getitem__(self, key):
-        """."""
-        return self.children[key]
-
-
-class Trie:
-    """Trie tree class."""
-
-    def __init__(self):
-        """Attr upon initialization."""
-        self.root = {}
-        self.head = Node()
-        self._size = 0
-
-    def __getitem__(self, key):
-        """."""
-        return self.head.children[key]
+            raise ValueError('Must be a list or tuple.')
 
     def insert(self, string):
-        """Insert a word to the trie tree."""
-        if string is None or string == '':
-            raise ValueError('A string would be nice')
-        else:
-            curr_node = self.head
-            end_word = True
-            for i in range(len(string)):
-                if string[i] in curr_node.children:
-                    curr_node = curr_node.children[string[i]]
-                else:
-                    end_word = False
-                    break
-            if not end_word:
-                while i < len(string):
-                    curr_node._add_child(string[i])
-                    curr_node = curr_node.children[string[i]]
-                    i += 1
-            curr_node.data = string
-            curr_node._add_child('$')
-            self._size += 1
+        """Insert a word into the tree."""
+        if not isinstance(string, str):
+            raise ValueError('Must be a string.')
+        curr = self.root
+        for l in string:
+            if l not in curr.children:
+                curr.children[l] = Node()
+            curr = curr.children[l]
+            curr.prefix += 1
+        curr.end = True
+        self.size += 1
 
     def contains(self, string):
-        """Check to see if trie contains a specific string."""
-        if string == '':
-            return ValueError('A string is required')
-        if string is None:
-            return ValueError('A string is required')
-        curr_node = self.head
-        exists = True
-        for i in string:
-            if i in curr_node.children:
-                curr_node = curr_node.children[i]
-            else:
-                exists = False
-                break
-        if exists:
-            if curr_node.data is None:
-                exists = False
+        """Check for word in the trie."""
+        if not isinstance(string, str):
+            raise ValueError('Can only search for a string.')
+        curr = self.root
+        for l in string:
+            if l not in curr.children:
+                return False
+            curr = curr.children[l]
+        return curr.end
 
-        return exists
+    def remove(self, string):
+        """Remove a word from the trie."""
+        if not isinstance(string, str):
+            raise ValueError('Can only search string.')
+        curr = self.root
+        stack = []
+        for l in string:
+            if l not in curr.children:
+                raise ValueError('The word you entered is not in the trie.')
+            stack.append(curr)
+            curr = curr.children[l]
+        if curr.end:
+            self._erase_children(stack, string)
+        else:
+            raise ValueError('no such word exist in trie')
+
+    def _erase_children(self, stack, string):
+        """Helper function for removing the word."""
+        reverse_word = string[::-1]
+        i = -1
+        for l in reverse_word:
+            if len(stack[i].children[l].children) == 0:
+                del stack[i].children[l]
+            else:
+                stack[i].children[l].end = False
+                break
+            i -= 1
+        self.size -= 1
+
+    def traversal_letter(self, start, curr=None):
+        """."""
+        if not isinstance(start, str):
+            raise ValueError('Must be a string')
+        curr = self.root
+        for l in start:
+            if l not in curr.children:
+                return []
+            curr = curr.children[l]
+        return self._dfs_letter(curr, start)
+
+    def _dfs_letter(self, node, start):
+        """Search the tree with dfs to get letters."""
+        if node.end:
+            yield start
+        for l in node.children:
+            for word in self._dfs(node.children[l], l):
+                for l in word:
+                    yield l
+
+    def traversal_word(self, start):
+        """Generator for words with prefix of start or part of start."""
+        if not isinstance(start, str):
+            raise ValueError('can only traverse form a string')
+        curr = self.root
+        for l in start:
+            if l not in curr.children:
+                return []
+            curr = curr.children[l]
+        return self._dfs(curr, start)
+
+    def _dfs(self, node, start):
+        """Extra Credit: Search the tree with dfs to form words."""
+        if node.end:
+            yield start
+        for letter in node.children:
+            for word in self._dfs(node.children[letter], start + letter):
+                yield word
 
     def size(self):
-        """Return the total number of words in the Trie."""
-        return self._size
-
-      
-    def remove(self, string):
-        """Remove string from Trie tree."""
-        if self.contains(string):
-            self._size -= 1
-            temp = self.root
-            temp_str = list(string)
-            for i in range(len(string)):
-                for letter in temp_str:
-                    if temp[letter] in ({'$': '$'}, {}):
-                        del temp[letter]
-                        temp_str.pop()
-                    else:
-                        temp = temp[letter]
-                temp = self.root
-        else:
-            raise ValueError('String not in tree.')
+        """Return the size of current prefix tree."""
+        return self.size
