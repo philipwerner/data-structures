@@ -1,91 +1,123 @@
-"""Tests for DLL module."""
+"""Tests for DLL."""
 import pytest
 from dll import DoubleLinkedList
+from dll import Node
 
 
-@pytest.fixture(scope='function')
-def dll():
-    """Making one mt dll instance per test."""
-    from dll import DoubleLinkedList
-    return DoubleLinkedList()
-
-
-@pytest.fixture(scope='function')
-def dll_20():
-    """Making one dll instance with len of 20 per test."""
-    from dll import DoubleLinkedList
+@pytest.fixture
+def double(scope="function"):
+    """Return dbly linked list for testing."""
     dll = DoubleLinkedList()
-    for num in range(20):
-        dll.push(num)
     return dll
 
 
-def test_init_new_dll(dll):
-    """Will test that the instance is initialized."""
-    assert isinstance(dll, DoubleLinkedList)
+def test_node_has_attributes():
+    """Test node."""
+    n = Node(1, None, None)
+    assert hasattr(n, 'data')
+    assert hasattr(n, 'next')
+    assert hasattr(n, 'prev')
 
 
-def test_dll_push(dll):
-    """Will test the .push() function of dll."""
-    for num in range(20):
-        old_head = dll.head
-        dll.push(num)
-        assert dll.head.data == num
-        assert dll.head.next == old_head
+def test_doubly_linked_list_has_head(double):
+    """Test head."""
+    assert double.list.head is None
 
 
-def test_dll_pop(dll_20):
-    """Will test the pop() function of dll."""
-    for _ in range(20):
-        next_head = dll_20.head.next
-        dll_20.pop()
-        assert dll_20.head == next_head
+def test_doubly_linked_list_push_adds_new_item(double):
+    """Test push."""
+    double.push('val')
+    assert double.head.data == 'val'
+
+
+def test_doubly_linked_list_counter(double):
+    """Test counter."""
+    double.push(1)
+    double.push(2)
+    assert len(double) == 2
+
+
+def test_doubly_linked_list_push(double):
+    """Test push."""
+    double.push(1)
+    assert len(double) == 1
+
+
+def test_doubly_linked_list_append(double):
+    """Test append."""
+    double.append(1)
+    assert len(double) == 1
+
+
+def test_doubly_linked_shift(double):
+    """Test pop."""
+    double.push(77)
+    assert double.pop() == 77
+
+
+def test_doubly_pop_and_append(double):
+    """Test popping an append."""
+    double.append(77)
+    assert double.pop() == 77
+
+
+def test_pop_when_empty_list_exception(double):
+    """Test error for pop of empty list."""
     with pytest.raises(IndexError):
-        dll_20.pop()
+        double.pop()
 
 
-def test_dll_append(dll):
-    """Will test the append() function of dll."""
-    for num in range(20):
-        old_tail = dll.tail
-        dll.append(num)
-        assert dll.tail.previous == old_tail
+def test_shift_returns_correct_val(double):
+    """Test shift."""
+    double.push(77)
+    double.push(66)
+    double.push(55)
+    assert double.shift() == 77
 
 
-def test_dll_shift(dll_20):
-    """Testing the shift() function of dll."""
-    for num in range(20):
-        new_tail = dll_20.tail.previous
-        dll_20.shift()
-        assert dll_20.tail == new_tail
+def test_shift_when_empty_list_exception(double):
+    """Test error for pop of empty list."""
     with pytest.raises(IndexError):
-        dll_20.shift()
+        double.shift()
 
 
-def test_dll_remove(dll_20):
-    """Testing for the remove() function of dll."""
-    for num in range(20):
-        dll_20.remove(num)
-        temp = dll_20.head
-        while temp:
-            assert num != temp
-            temp = temp.next
-    with pytest.raises(IndexError):
-        dll_20.pop()
+def test_doubly_next_val_assign_when(double):
+    """Test popping an append."""
+    double.append(77)
+    double.append(66)
+    double.append(55)
+    assert double.pop() == 77
+    assert double.pop() == 66
+    assert double.pop() == 55
 
 
-def test_dll_remove_tail_val(dll_20):
-    """Assert if tail gets re-assigned after old tail is removed."""
-    dll_20.remove(0)
-    assert dll_20.tail.data == 1
+def test_init_iterable():
+    """Test for handling interable on init."""
+    dll = DoubleLinkedList((77, 66, 55))
+    assert dll.pop() == 77
+    assert dll.pop() == 66
+    assert dll.pop() == 55
 
 
-def test_dll_remove_head_val(dll_20):
-    """Assert if head gets re-assigned after old head is removed."""
-    dll_20.remove(20)
-    assert dll_20.head.data == 19
+def test_remove_method(double):
+    """Test remove method."""
+    double.push(3)
+    double.push(2)
+    double.push(1)
+    double.remove(2)
+    assert double.pop() == 1
+    assert double.pop() == 3
 
 
-def test_len_function(dll_20):
-    """Test the length function works."""
-    assert len(dll_20) == 20
+def test_remove_when_val_not_in_list(double):
+    """Test error for pop of empty list."""
+    with pytest.raises(ValueError):
+        double.push(1)
+        double.push(1)
+        double.remove(2)
+
+
+def test_pop(double):
+    """Test error for pop of empty list."""
+    double.push(1)
+    assert double.pop() == 1

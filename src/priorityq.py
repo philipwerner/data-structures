@@ -1,39 +1,40 @@
 """Priority Queue data strcture."""
 
 
-class Priorityq:
-    """Priority Que class."""
+class Priorityq(object):
+    """Priority Que that returns values based on priority."""
 
-    def __init__(self, value=None, pri=0):
-        """Create a instance of the priority class."""
-        self.q = {}
+    def __init__(self):
+        """Initialize the priority que, initializing a dictionary."""
+        self.p_que = {}
 
-    def insert(self, data, pri=0):
-        """Will insert a value in the priority queue with a priority of 0 or the optional priority input."""
-        from que_ import Queue
-        if not data:
-            raise ValueError('need value to push')
-        try:
-            self.q[pri]
-        except KeyError:
-            self.q[pri] = Queue()
-        self.q[pri].enqueue(data)
-
-    def pop(self):
-        """Will pop the first inserted instances of the highest priority and return the value."""
-        if self.q == {}:
-            raise ValueError('need value to pop')
-        pri_to_pop = sorted(self.q.keys())[-1]
-        q_pop = self.q[pri_to_pop].dequeue()
-        try:
-            self.q[pri_to_pop].peek()
-        except AttributeError:
-            del self.q[pri_to_pop]
-        return q_pop
+    def insert(self, data, priority=0):
+        """Insert value and an optional priority parameter."""
+        if isinstance(data, (tuple, list)):
+            for item in data:
+                self.insert(item, priority)
+        else:
+            try:
+                self.p_que[priority].append(data)
+            except KeyError:
+                self.p_que[priority] = [data]
 
     def peek(self):
-        """Return the next priority item that will be popped without popping the item."""
-        if self.q == {}:
-            raise ValueError('no values available')
-        pri_to_peek = sorted(self.q.keys())[-1]
-        return self.q[pri_to_peek].peek()
+        """Look at the next value that would be popped."""
+        try:
+            priority = sorted(self.p_que.keys(), reverse=True)
+            return self.p_que[priority[0]][0]
+        except IndexError:
+            raise IndexError('Cannot peek empty queue.')
+
+    def pop(self):
+        """Remove highest priority."""
+        priority = sorted(self.p_que.keys(), reverse=True)
+        try:
+            return self.p_que[priority[0]].pop(0)
+        except IndexError:
+            try:
+                self.p_que.pop(priority[0])
+                return self.pop()
+            except TypeError:
+                raise IndexError('Cannot pop empty queue.')
