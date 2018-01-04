@@ -25,7 +25,7 @@ def radix_sort(ilist):
             place *= x
         return ilist
     else:
-        raise TypeError('Radix sort is for lists only')
+        raise TypeError('Radix sort only takes lists')
 
 
 if __name__ == '__main__':  # pragma no cover
