@@ -23,20 +23,6 @@ def test_init_new_dll(deque):
     assert isinstance(deque, Deque)
 
 
-def test_deque_append_left(deque):
-    """Will test the .append_left() function of deque append new value to end."""
-    for num in range(20):
-        deque.append_left(num)
-        assert num == deque._dll.head.data
-
-
-def test_deque_append(deque):
-    """Will test the append() function of deque."""
-    for num in range(20):
-        deque.append(num)
-        assert num == deque._dll.tail.data
-
-
 def test_deque_pop(deque):
     """Will test the pop() function of deque will return and remove the tail value."""
     deque.append(1)
@@ -112,45 +98,65 @@ def test_deque_size_after_appending_and_popping_left(deque):
     assert deque.size() == 1
 
 
-def test_len_method_works_on_empty_deque(deque):
-    """Testing that len() returns 0 on empty deque."""
-    assert len(deque) == 0
-
-
-def test_len_method_works_on_appended_list(deque):
-    """Testing that len()returns proper length after appending."""
-    deque.append(1)
-    deque.append(2)
-    assert len(deque) == 2
-
-
-def test_len_method_works_on_append_left_list(deque):
-    """Testing that len()returns proper length after appending."""
-    deque.append_left(1)
-    deque.append_left(2)
-    assert len(deque) == 2
-
-
-def test_empty_deque_raise_error_when_peek(deque):
-    """Test if error is raised if peek empty deque."""
-    with pytest.raises(ValueError):
-        deque.peek()
-
-
-def test_empty_deque_raise_error_when_pop(deque):
-    """Test if error is raised if pop empty deque."""
-    with pytest.raises(ValueError):
+def test_pop_empty_throws_error(deque):
+    """Test pop empty throws error."""
+    with pytest.raises(IndexError):
         deque.pop()
 
 
-def test_empty_deque_raise_error_when_pop_left(deque):
-    """Test if error is raised if pop left empty deque."""
-    with pytest.raises(ValueError):
-        deque.peek_left()
+def test_popleft_empty_throws_error(deque):
+    """Test popleft empty throws error."""
+    with pytest.raises(IndexError):
+        deque.pop_left()
 
 
-def test_empty_deque_raise_error_when_peek_left(deque):
-    """Test if error is raised if peek left empty deque."""
-    with pytest.raises(ValueError):
-        deque.peek_left()
+def test_peek_after_append(deque):
+    """Test peek after appending one value."""
+    deque.append(1)
+    assert deque.peek() == 1
 
+
+def test_peek_after_two_append(deque):
+    """Test peek after appending one value."""
+    deque.append(2)
+    deque.append(1)
+    assert deque.peek() == 1
+
+
+def test_peek_after_append_left(deque):
+    """Test peek after appending one value to the left."""
+    deque.append_left(5)
+    assert deque.peek() == 5
+
+
+def test_peek_after_two_append_left(deque):
+    """Test peek after appending one value to the left."""
+    deque.append_left(5)
+    deque.append_left(6)
+    assert deque.peek() == 5
+
+
+def test_peekleft_after_append(deque):
+    """Test peekleft after appending value."""
+    deque.append(504)
+    assert deque.peek_left() == 504
+
+
+def test_peekleft_after_two_append(deque):
+    """Test peekleft after appending value."""
+    deque.append(2)
+    deque.append(7)
+    assert deque.peek_left() == 2
+
+
+def test_peekleft_after_appendleft(deque):
+    """Test peekleft after appending to the left of deque."""
+    deque.append_left(99)
+    assert deque.peek_left() == 99
+
+
+def test_peekleft_after_two_appendleft(deque):
+    """Test peekleft after appending to the left of deque."""
+    deque.append_left(1)
+    deque.append_left(2)
+    assert deque.peek_left() == 2

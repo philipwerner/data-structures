@@ -1,59 +1,47 @@
 """Create a deque class."""
 
 
+from dll import DoubleLinkedList
+
+
 class Deque(object):
-    """Will create a instance of Deque."""
+    """Deque data structure, can add and remove from both ends."""
 
-    def __init__(self, iterable=None):
-        """Will init a new instance of the Stack class."""
-        from dll import DoubleLinkedList
-        self._dll = DoubleLinkedList()
-        self._counter = 0
+    def __init__(self):
+        """Initialize the deque."""
+        self.deque = DoubleLinkedList()
 
-    def append(self, data):
-        """Will push a new element into the Deque."""
-        self._dll.append(data)
-        self._counter += 1
+    def append(self, value):
+        """Add an item to the back of the deque."""
+        self.deque.append(value)
 
-    def pop_left(self):
-        """Will remove the head value."""
-        if self._dll.head:
-            self._counter -= 1
-        else:
-            raise ValueError('no value left to pop')
-        return self._dll.pop()
-
-    def append_left(self, data):
-        """Append a value to the head."""
-        self._dll.push(data)
-        self._counter += 1
+    def append_left(self, value):
+        """Add an item to the front of the deque."""
+        self.deque.push(value)
 
     def pop(self):
-        """Pop a value from the end."""
-        if self._dll.tail:
-            self._counter -= 1
-        else:
-            raise ValueError('no value left to pop')
-        return self._dll.shift()
+        """Pop a value off of the back of the deque and return it."""
+        return self.deque.shift()
 
-    def peek_left(self):
-        """Will return the value that pop_left would return."""
-        if self._dll.head:
-            return self._dll.head.data
-        else:
-            raise ValueError('no value in the deque to peek')
+    def pop_left(self):
+        """Pop a value off of the front of the deque and return it."""
+        return self.deque.pop()
 
     def peek(self):
-        """Will return the value that pop would return."""
-        if self._dll.head:
-            return self._dll.tail.data
-        else:
-            raise ValueError('no value in the deof correct typeque to peek')
+        """Return the next value that would be poped at the end of deque."""
+        try:
+            return self.deque.tail.data
+        except AttributeError:
+            return None
+
+    def peek_left(self):
+        """Return the next value to pop in the deque."""
+        try:
+            return self.deque.head.data
+        except AttributeError:
+            return None
 
     def size(self):
-        """Return the size of the deque."""
-        return self._counter
+        """Return the number of nodes in the deque."""
+        return self.deque.__len__()
 
-    def __len__(self):
-        """Will return the length of the deque using len()."""
-        return self._counter
