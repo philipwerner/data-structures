@@ -13,3 +13,19 @@ test('Test push method works', () => {
     expect(l.head.next.val)toBe(99)
 });
 
+test('Test input as iterable', () => {
+    let l = new linkedList.LinkedList([99, 98]);
+    expect(l.head.val).toBe(98)
+    expect(l.head.next.val)toBe(99)
+});
+
+test('Test pop method works', () => {
+    let l = new linkedList.LinkedList([99, 98]);
+    expect(l.pop()).toBe(99)
+    expect(l.head.val).toBe(98)
+});
+
+test('Test pop method on empty linked list', () => {
+    let l = new linkedList.LinkedList();
+    expect(l.pop()).toBeNull()
+});
