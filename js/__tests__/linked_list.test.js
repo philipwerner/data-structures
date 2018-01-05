@@ -13,4 +13,3 @@ test('Test push method works', () => {
     expect(l.head.next.val)toBe(99)
 });
 
-test
