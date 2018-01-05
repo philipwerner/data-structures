@@ -198,3 +198,27 @@ A binary tree search non self balacing data structure
 
 - Pre Order Traversal: O(n)
     - Return a generator object that goes through values in the tree via pre order traversal
+
+
+# Bubblesort
+- Bubblesort: O(n^2)
+    - A sorting method that compared values down the list and swaps until sorted.
+
+
+# Insertion Sort
+- Insertionsort: O(n^2)
+    A sorting method that push each value in it's correct place as it checks each val.
+
+
+# Merge Sort
+- Mergesort: O(n * log(n))
+    - A sorting method that recursively sorts a list by deviding it into sublists and then sorting those. 
+    
+
+# Quick Sort
+- Quicksort: O(n * log(n)) Average - O(n^2) Worst
+    - A sorting method that recursively sorts a list. 
+
+# Radix Sort
+- Radixsort: O(n * k)
+    - A sorting method that sorts numbers based on the values of their segnificant digits.
