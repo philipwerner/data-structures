@@ -30,12 +30,6 @@ test('Test pop method on empty linked list', () => {
     expect(l.pop()).toBeNull()
 });
 
-test('Test pop method works', () => {
-    let l = new linkedList.LinkedList([99, 98]);
-    expect(l.pop()).toBe(99)
-    expect(l.head.val).toBe(98)
-});
-
 test('Test size method', () => {
     let l = new linkedList.LinkedList([99, 98, 97, 96]);
     expect(l.size()).toBe(4)
@@ -59,8 +53,9 @@ test('Test search method when node not present', () => {
 
 test('Test remove method', () => {
     let l = new linkedList.LinkedList([99, 98, 97, 96]);
-    l.remove(99)
+    l.remove(97)
     expect(l.size()).toBe(3)
+    expect(l.display()).toBe('(96, 98, 99)')
 })
 
 test('Test display method', () => {
