@@ -37,3 +37,11 @@ test('Test peek method works', () => {
     s.push(75)
     expect(s.peek()).toBe(75)
 })
+
+test('Test length shows proper length', () => {
+    let s = new stack.Stack();
+    s.push(25)
+    s.push(50)
+    s.push(75)
+    expect(s.length).toBe(3)
+})
