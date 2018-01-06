@@ -16,15 +16,12 @@ class Node(object):
 class DoubleLinkedList(object):
     """A doubly linked list."""
 
-    def __init__(self, iterable=None):
+    def __init__(self):
         """Initialize dbl linked list."""
         self.list = LinkedList()
         self.head = None
         self.tail = None
         self._counter = 0
-        if isinstance(iterable, (tuple, list)):
-            for item in iterable:
-                self.append(item)
 
     def __len__(self):
         """Return length of list."""
