@@ -1,34 +1,30 @@
-"""."""
-
+"""Test file for Linked List implementation"""
+from linked_list import Node
+from linked_list import LinkedList
 import pytest
 
-
 def test_node_has_attributes():
-    """."""
-    from linked_list import Node
+    """Test that the node contains proper attributes."""
     n = Node(1, None)
     assert hasattr(n, 'data')
     assert hasattr(n, 'next')
 
 
 def test_linked_list_has_head():
-    """."""
-    from linked_list import LinkedList
+    """Test that there is a head node in the LL."""
     l = LinkedList()
     assert l.head is None
 
 
 def test_linked_list_insert_adds_new_item():
-    """."""
-    from linked_list import LinkedList
+    """Test that when a new node is added, it is assigned as the head as well."""
     l = LinkedList()
     l.insert('val')
     assert l.head.data == 'val'
 
 
 def test_linked_list_insert_two_last_value_is_head():
-    """."""
-    from linked_list import LinkedList
+    """Test that the head is reassigned when adding another node to the LL."""
     l = LinkedList()
     l.insert('val')
     l.insert('val2')
@@ -36,8 +32,7 @@ def test_linked_list_insert_two_last_value_is_head():
 
 
 def test_linked_list_insert_two_last_value_is_next_head():
-    """."""
-    from linked_list import LinkedList
+    """Test that the head next value is correctly assigned."""
     l = LinkedList()
     l.insert('val')
     l.insert('val2')
@@ -45,8 +40,7 @@ def test_linked_list_insert_two_last_value_is_next_head():
 
 
 def test_linked_list_removes_and_returns_head():
-    """."""
-    from linked_list import LinkedList
+    """Test that removing only node makes the head none."""
     l = LinkedList()
     l.insert('potato')
     l.pop()
@@ -54,8 +48,7 @@ def test_linked_list_removes_and_returns_head():
 
 
 def test_linked_list_removes_and_returns_head_value():
-    """."""
-    from linked_list import LinkedList
+    """Test that the value of removed node is returned."""
     l = LinkedList()
     l.insert('potato')
     output = l.pop()
@@ -63,8 +56,7 @@ def test_linked_list_removes_and_returns_head_value():
 
 
 def test_linked_list_pop_shifts_head_properly():
-    """."""
-    from linked_list import LinkedList
+    """Test that when node removed the head properly assigned."""
     l = LinkedList()
     l.insert('potato')
     l.insert('cabbage')
@@ -73,24 +65,21 @@ def test_linked_list_pop_shifts_head_properly():
 
 
 def test_linked_list_pop_empty_raises_exception():
-    """."""
-    from linked_list import LinkedList
+    """Test that an error is raised when popping an empty LL."""
     l = LinkedList()
     with pytest.raises(IndexError):
         l.pop()
 
 
 def test_linked_list_returns_size_returns_list_length():
-    """."""
-    from linked_list import LinkedList
+    """Test length works on empty LL."""
     l = LinkedList()
     assert l.size() == 0
 
 
 @pytest.mark.parametrize('n', range(10))
 def test_linked_list_returns_size_returns_list_length_one(n):
-    """."""
-    from linked_list import LinkedList
+    """Test multiple lengths are returned properly."""
     l = LinkedList()
     for i in range(n):
         l.insert(i)
@@ -99,8 +88,7 @@ def test_linked_list_returns_size_returns_list_length_one(n):
 
 @pytest.mark.parametrize('n', range(10))
 def test_linked_list_returns_size_returns_list_len_function(n):
-    """."""
-    from linked_list import LinkedList
+    """Test that len method finds the right length."""
     l = LinkedList()
     for i in range(n):
         l.insert(i)
@@ -108,23 +96,20 @@ def test_linked_list_returns_size_returns_list_len_function(n):
 
 
 def test_linked_list_search_empty_returns_none():
-    """."""
-    from linked_list import LinkedList
+    """Test that nothing is found when LL is empty"""
     l = LinkedList()
     assert l.search(0) is None
 
 
 def test_linked_list_search_with_one_node_returns_node():
-    """."""
-    from linked_list import LinkedList
+    """Test that search finds proper node."""
     l = LinkedList()
     l.insert(1)
     assert l.search(1) == l.head
 
 
 def test_linked_list_search_one_returns_none():
-    """."""
-    from linked_list import LinkedList
+    """Test for proper response when search value does not exist."""
     l = LinkedList()
     l.insert(1)
     assert l.search(0) is None
@@ -132,8 +117,7 @@ def test_linked_list_search_one_returns_none():
 
 @pytest.mark.parametrize('n', range(1, 10))
 def test_linked_list_search_in_many_returns_proper_node(n):
-    """."""
-    from linked_list import LinkedList
+    """Test search method works."""
     from random import randint
     l = LinkedList()
     for i in range(1, n + 1):
@@ -143,8 +127,7 @@ def test_linked_list_search_in_many_returns_proper_node(n):
 
 
 def test_linked_list_can_take_iterable():
-    """."""
-    from linked_list import LinkedList
+    """Test that a LL object can be instantiated with iterable arg."""
     a_list = [5, 2, 9, 0, 1]
     l = LinkedList(a_list)
     for item in a_list:
@@ -152,16 +135,14 @@ def test_linked_list_can_take_iterable():
 
 
 def test_display_with_one_node():
-    """."""
-    from linked_list import LinkedList
+    """Test that display works with one node in LL."""
     l = LinkedList()
     l.insert(8)
     assert l.display() == '(8)'
 
 
 def test_display_with_mult_nodes():
-    """."""
-    from linked_list import LinkedList
+    """Test displaying LL with more than one node."""
     l = LinkedList()
     l.insert(8)
     l.insert(9)
@@ -170,8 +151,7 @@ def test_display_with_mult_nodes():
 
 
 def test_remove_linked_list_single():
-    """."""
-    from linked_list import LinkedList
+    """Test that you can remove the only node in a LL."""
     l = LinkedList()
     l.insert(8)
     l.remove(8)
@@ -179,8 +159,7 @@ def test_remove_linked_list_single():
 
 
 def test_remove_linked_list():
-    """."""
-    from linked_list import LinkedList
+    """Test that you can remove nodes from the LL with multiple nodes."""
     l = LinkedList()
     l.insert(8)
     l.insert(9)
@@ -190,16 +169,14 @@ def test_remove_linked_list():
 
 
 def test_remove_linked_list_empty():
-    """."""
-    from linked_list import LinkedList
+    """Test that an error is thrown when removing from empty LL."""
     l = LinkedList()
     with pytest.raises(IndexError):
         assert l.remove(8)
 
 
 def test_print():
-    """."""
-    from linked_list import LinkedList
+    """Test the print method prints properly."""
     l = LinkedList()
     l.insert(8)
     l.insert(9)
@@ -209,8 +186,7 @@ def test_print():
 
 
 def test_len():
-    """."""
-    from linked_list import LinkedList
+    """Test that the len method works."""
     l = LinkedList()
     l.insert(8)
     l.insert(9)
