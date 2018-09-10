@@ -1,0 +1,8 @@
+[
+  "src/queue/test_queue.py::test_can_instantiate_a_queue",
+  "src/queue/test_queue.py::test_can_enqueue_into_empty_queue",
+  "src/queue/test_queue.py::test_can_enqueue_multiple_times",
+  "src/queue/test_queue.py::test_len_method_shows_length_when_enqueue_into_empty_queue",
+  "src/queue/test_queue.py::test_len_on_iterable_created_queue",
+  "src/queue/test_queue.py::test_can_dequeue_from_iter_created_queue"
+]
